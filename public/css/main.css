@@ -22,7 +22,25 @@ body {
     color: var(--text-color);
     line-height: 1.6;
     overflow-x: hidden;
+
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
+
+html,
+body {
+    height: 100%;
+}
+
+
+
+main {
+    /* flex: 1; */
+    flex-grow: 1;
+}
+
+
 
 /* Header */
 header {
@@ -357,7 +375,15 @@ footer {
     color: white;
     text-align: center;
     padding: 1rem;
-    margin-top: 2rem;
+    /* margin-top: 2rem; */
+
+
+
+    margin-top: auto;
+        /* padding: 1rem; */
+        /* background-color: #333; */
+        /* color: white; */
+        /* text-align: center; */
   
 }
 
@@ -509,4 +535,12 @@ footer {
 #inv-display span {
     font-weight: bold;
     color: var(--secondary-color);
+}
+
+
+.layout-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    min-height: 100vh;
 }
