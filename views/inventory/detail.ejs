@@ -1,0 +1,28 @@
+<main class="container">
+    <%- body %>
+</main>
+
+<style>
+    .vehicle-detail {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        padding: 2rem;
+    }
+
+    .vehicle-image img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .vehicle-info {
+        flex: 1;
+        min-width: 250px;
+    }
+
+    @media (max-width: 768px) {
+        .vehicle-detail {
+            flex-direction: column;
+        }
+    }
+</style>
