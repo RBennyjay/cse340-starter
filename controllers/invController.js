@@ -7,17 +7,29 @@ const invCont = {}
  *  Build inventory by classification view
  * ************************** */
 invCont.buildByClassificationId = async function (req, res, next) {
-  const classification_id = req.params.classificationId
-  const data = await invModel.getInventoryByClassificationId(classification_id)
-  const grid = await utilities.buildClassificationGrid(data)
-  let nav = await utilities.getNav()
-  const className = data[0].classification_name
-  res.render("./inventory/classification", {
-    title: className + " vehicles",
-    nav,
-    grid,
-  })
-}
+  try {
+    const classification_id = req.params.classificationId;
+    const data = await invModel.getInventoryByClassificationId(classification_id);
+    const grid = await utilities.buildClassificationGrid(data);
+    let nav = await utilities.getNav();
+    
+    if (!data.length) {
+      return next({ status: 404, message: "No vehicles found for this classification" });
+    }
+
+    const className = data[0].classification_name;
+
+    res.render("./inventory/classification", {
+      title: className + " vehicles",
+      nav,
+      grid,
+      classificationName: className,
+      inventory: data,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 // invCont.buildByClassificationId = async function (req, res, next) {
 //   throw new Error("Deliberate server error for testing");
@@ -38,6 +50,7 @@ invCont.buildInventory = async function (req, res, next) {
       title: "All Vehicles",
       nav,
       grid,
+      inventory: data,
     });
   } catch (error) {
     next(error);
@@ -76,7 +89,8 @@ async function buildDetailView(req, res, next) {
     res.render("inventory/detail", {
       title: `${data.inv_make} ${data.inv_model}`,
       nav,
-      body: vehicleHtml,
+      // body: vehicleHtml,
+      vehicle: data,
     });
   } catch (err) {
     next(err);

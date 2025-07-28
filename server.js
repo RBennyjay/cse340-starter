@@ -46,6 +46,8 @@ app.use(async (req, res, next) => {
   next({status: 404, message: 'Sorry, we appear to have lost that page.'})
 })
 
+app.use(require('./utilities/errorHandler'))
+
 
 /* ***********************
 * Express Error Handler
