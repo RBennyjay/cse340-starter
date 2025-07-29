@@ -547,3 +547,22 @@ footer {
         padding-left: 2rem;
     }
 }
+
+#messages {   
+    /* top: 20px; */
+    color: red;  
+}
+
+form {
+    max-width: 400px;
+    margin: 1rem auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+/* .message {
+    color: red;
+    font-weight: bold;
+    text-align: center;
+} */

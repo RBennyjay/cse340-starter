@@ -1,4 +1,4 @@
-const Util = require("./index"); // adjust path if needed
+const Util = require("./index"); 
 
 async function errorHandler(err, req, res, next) {
   const status = err.status || 500;
@@ -14,7 +14,7 @@ async function errorHandler(err, req, res, next) {
   res.status(status).render("errors/error", {
     title: "Error",
     message,
-    nav, // ✅ required for layout/partials
+    nav, 
   });
 }
 
