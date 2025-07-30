@@ -1,19 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include('../partials/head', { title: title }) %>
-<link rel="stylesheet" href="/css/styles.css">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSE Motors</title>
 
-    <body>
-        <div class="layout-wrapper">
-            <%- include('../partials/header') %>
+    <!-- CSS Links -->
+   
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/main.css">
+</head>
 
-                <main>
-                    <%- body %>
-                </main>
+<body>
 
-                <%- include('../partials/footer') %>
-        </div>
-    </body>
+    <!-- Header Partial -->
+    <%- include('../partials/header') %>
+
+        <!-- Flash Messages -->
+        <% if (locals.success && locals.success.length> 0) { %>
+            <div class="flash-message success">
+                <%= success[0] %>
+            </div>
+            <% } %>
+
+                <% if (locals.error && locals.error.length> 0) { %>
+                    <div class="flash-message error">
+                        <%= error[0] %>
+                    </div>
+                    <% } %>
+
+                        <!-- Main Content -->
+                        <main>
+                            <%- body %>
+                                <%- messages() %>
+                        </main>
+
+                        <!-- Footer Partial -->
+                        <%- include('../partials/footer') %>
+
+</body>
 
 </html>

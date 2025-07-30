@@ -13,13 +13,18 @@ const flash = require("connect-flash")
 const pgSession = require("connect-pg-simple")(session)
 const app = express()
 
+
 const static = require("./routes/static")
 const baseController = require("./controllers/baseController")
 const utilities = require("./utilities/")
 const inventoryRoute = require("./routes/inventoryRoute")
 const accountRoute = require("./routes/accountRoute")
 const pool = require('./database/')
+const bodyParser = require("body-parser")
 
+
+// Serve static files
+app.use(express.static("public"))
 
 /* ***********************
  * Session Middleware
@@ -49,10 +54,13 @@ app.set("view engine", "ejs")
 app.use(expressLayouts)
 app.set("layout", "layouts/layout")
 
+
+
 /* ***********************
  * Static and Route Middleware
  *************************/
 app.use(static)
+
 
 // Home route
 app.get("/", utilities.handleErrors(baseController.buildHome))
@@ -62,6 +70,10 @@ app.use("/inv", inventoryRoute)
 
 // Account routes
 app.use("/account", accountRoute)
+
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+
 
 
 /* ***********************

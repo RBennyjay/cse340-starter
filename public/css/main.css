@@ -451,8 +451,8 @@ footer {
     
 }
 
-
- /* #inv-display {
+  
+  /* #inv-display {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
@@ -461,8 +461,8 @@ footer {
     list-style: none;
     justify-content: center;
     /* Optional: center-aligns items */
-}  */
-
+}    */
+ 
 
 
 
@@ -497,11 +497,12 @@ footer {
 
 .vehicle-detail-image img {
     width: 100%;
-    max-width: 600px;
-    height: auto;
+    max-width: 550px;
+    height: 280px;
     display: block;
     margin: 0 auto;
     border-radius: 8px;
+    object-fit: cover;
 }
 
 .vehicle-detail-info {
@@ -541,6 +542,14 @@ footer {
 
     .vehicle-detail-image img {
         margin: 0;
+
+        /* width: 100%;
+            max-width: 700px;
+            height: 350px;
+            display: block;
+            margin: 0 auto;
+            border-radius: 8px;
+            object-fit: cover; */
     }
 
     .vehicle-detail-info {
