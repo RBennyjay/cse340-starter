@@ -2,13 +2,30 @@
     <div class="login-container">
         <h2>Register</h2>
 
-        <% if (message && message.length> 0) { %>
-            <% const type=messageType && messageType.length> 0 ? messageType[0] : 'info'; %>
+    <% const msg=(message && message.length> 0) ? message[0] : null; %>
+        <% const type=(messageType && messageType.length> 0) ? messageType[0] : 'info'; %>
+    
+            <% if (msg) { %>
                 <div class="flash-message <%= type %>">
                     <%= type==='success' ? '✅' : type==='error' ? '❌' : 'ℹ️' %>
-                        <%= message[0] %>
+                        <%= msg %>
                 </div>
                 <% } %>
+
+
+
+                    <% if (message && message.length> 0) { %>
+                        <ul class="notice error-message">
+                            <% message.forEach(msg=> { %>
+                                <li>
+                                    <%= msg %>
+                                </li>
+                                <% }) %>
+                        </ul>
+                        <% } %>
+
+
+              
 
                     <form class="login-form" action="/account/register" method="POST">
                         <p class="required-note">
