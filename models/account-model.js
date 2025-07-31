@@ -14,4 +14,21 @@ async function registerAccount(account_firstname, account_lastname, account_emai
   }
 }
 
-module.exports = { registerAccount }
+/* *****************************
+*   Get account by email
+* *************************** */
+async function getAccountByEmail(email) {
+  try {
+    const sql = 'SELECT * FROM account WHERE account_email = $1'
+    const result = await pool.query(sql, [email])
+    return result.rows[0]
+  } catch (error) {
+    throw new Error('Error getting account by email: ' + error.message)
+  }
+}
+
+// Export both functions
+module.exports = { 
+  registerAccount,
+  getAccountByEmail 
+}

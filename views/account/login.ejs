@@ -12,11 +12,26 @@
     <div class="login-container">
         <h2>Login</h2>
 
-        <% if (message) { %>
-            <div class="error-message">
-                <%= message %>
-            </div>
-            <% } %>
+      <%# -- Start of commented out message block --
+  // Original EJS code below, now effectively commented out by modifying tags
+  // < % if (message) { % >
+  //           <div class="error-message">
+  //               < %= message % >
+  //           </div>
+  //           < % } % >
+-- End of commented out message block -- #%>
+
+
+<% if (message && message.length> 0) { %>
+    <% const type=messageType && messageType.length> 0 ? messageType[0] : 'info'; %>
+        <div class="flash-message <%= type %>">
+            <%= type==='success' ? '✅' : type==='error' ? '❌' : 'ℹ️' %>
+                <%= message[0] %>
+        </div>
+        <% } %>
+
+
+
 
                 <form action="/account/login" method="POST" class="login-form">
                     <label for="email">Email</label>

@@ -68,11 +68,14 @@ app.get("/", utilities.handleErrors(baseController.buildHome))
 // Inventory routes
 app.use("/inv", inventoryRoute)
 
-// Account routes
-app.use("/account", accountRoute)
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+
+// Account routes
+app.use("/account", accountRoute)
+
+
 
 
 
