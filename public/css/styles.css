@@ -273,3 +273,14 @@ body {
   color: #666;
   margin-bottom: 1rem;
 }
+
+.footer-link {
+  color: white;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+.footer-link:hover {
+  color: #ffcc00;
+ 
+}
