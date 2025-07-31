@@ -253,7 +253,8 @@ body {
 }
 
 .password-wrapper input {
-  padding-right: 4rem;
+  padding-right: 8rem;
+  box-sizing: border-box;
 }
 
 #togglePassword {
