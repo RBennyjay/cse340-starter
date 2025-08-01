@@ -12,19 +12,6 @@
                 </div>
                 <% } %>
 
-
-
-                    <% if (message && message.length> 0) { %>
-                        <ul class="notice error-message">
-                            <% message.forEach(msg=> { %>
-                                <li>
-                                    <%= msg %>
-                                </li>
-                                <% }) %>
-                        </ul>
-                        <% } %>
-
-
               
 
                     <form class="login-form" action="/account/register" method="POST">
@@ -33,14 +20,17 @@
                         </p>
 
                         <label for="firstname">First Name <span class="required-star">*</span></label>
-                        <input type="text" id="firstname" name="account_firstname" required>
+                        <input type="text" id="firstname" name="account_firstname" required
+                         value="<%= locals.account_firstname ? locals.account_firstname : '' %>">
 
                         <label for="lastname">Last Name <span class="required-star">*</span></label>
-                        <input type="text" id="lastname" name="account_lastname" required>
+                        <input type="text" id="lastname" name="account_lastname" required
+                        value="<%= locals.account_lastname ? locals.account_lastname : '' %>">
 
                         <label for="email">Email <span class="required-star">*</span></label>
                         <input type="email" id="email" name="account_email" required
-                        placeholder="Enter a valid email address">
+                        placeholder="Enter a valid email address"
+                        value="<%= locals.account_email ? locals.account_email : '' %>">
 
                         <label for="password">Password <span class="required-star">*</span></label>
                         <div class="password-wrapper">

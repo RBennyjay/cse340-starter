@@ -7,7 +7,6 @@
     <title>CSE Motors</title>
 
     <!-- CSS Links -->
-   
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/main.css">
 </head>
@@ -18,26 +17,17 @@
     <%- include('../partials/header') %>
 
         <!-- Flash Messages -->
-        <% if (locals.success && locals.success.length> 0) { %>
-            <div class="flash-message success">
-                <%= success[0] %>
-            </div>
-            <% } %>
+        <div class="flash-container">
+            <%- messages() %>
+        </div>
 
-                <% if (locals.error && locals.error.length> 0) { %>
-                    <div class="flash-message error">
-                        <%= error[0] %>
-                    </div>
-                    <% } %>
+        <!-- Main Content -->
+        <main>
+            <%- body %>
+        </main>
 
-                        <!-- Main Content -->
-                        <main>
-                            <%- body %>
-                                <%- messages() %>
-                        </main>
-
-                        <!-- Footer Partial -->
-                        <%- include('../partials/footer') %>
+        <!-- Footer Partial -->
+        <%- include('../partials/footer') %>
 
 </body>
 

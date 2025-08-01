@@ -26,6 +26,9 @@ const bodyParser = require("body-parser")
 // Serve static files
 app.use(express.static("public"))
 
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+
 /* ***********************
  * Session Middleware
  *************************/
@@ -69,8 +72,7 @@ app.get("/", utilities.handleErrors(baseController.buildHome))
 app.use("/inv", inventoryRoute)
 
 
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+
 
 // Account routes
 app.use("/account", accountRoute)

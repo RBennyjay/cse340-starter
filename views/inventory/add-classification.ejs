@@ -1,0 +1,14 @@
+    <main>
+        <h1>Add New Classification</h1>
+        <% if (message) { %>
+            <p class="notice">
+                <%= message %>
+            </p>
+            <% } %>
+                <form action="/inv/add-classification" method="post">
+                    <label for="classification_name">Classification Name (no spaces or symbols):</label>
+                    <input type="text" id="classification_name" name="classification_name" pattern="^[A-Za-z0-9]+$"
+                        required value="<%= typeof classification_name != 'undefined' ? classification_name : '' %>">
+                    <button type="submit">Add Classification</button>
+                </form>
+    </main>

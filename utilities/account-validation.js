@@ -1,5 +1,7 @@
 const utilities = require(".")
 const { body, validationResult } = require("express-validator")
+const accountModel = require("../models/account-model")
+
 
 const validate = {}
 
@@ -18,13 +20,26 @@ validate.registrationRules = () => {
       .escape()
       .notEmpty().withMessage("Please provide a last name."),
 
-    body("account_email")
-      .trim()
-      .escape()
-      .notEmpty().withMessage("A valid email is required.")
-      .bail()
-      .isEmail().withMessage("A valid email is required.")
-      .normalizeEmail(),
+    // body("account_email")
+    //   .trim()
+    //   .escape()
+    //   .notEmpty().withMessage("A valid email is required.")
+    //   .bail()
+    //   .isEmail().withMessage("A valid email is required.")
+    //   .normalizeEmail(),
+
+  body("account_email")
+  .trim()
+  .isEmail()
+  .normalizeEmail()
+  .withMessage("A valid email is required.")
+  .custom(async (account_email) => {
+    const emailExists = await accountModel.checkExistingEmail(account_email)
+    if (emailExists) {
+      throw new Error("Email exists. Please log in or use a different email.")
+    }
+  }),
+
 
     body("account_password")
       .trim()

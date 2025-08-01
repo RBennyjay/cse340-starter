@@ -51,6 +51,8 @@ invCont.buildInventory = async function (req, res, next) {
       nav,
       grid,
       inventory: data,
+      classificationName: "All Vehicles"
+
     });
   } catch (error) {
     next(error);
@@ -96,6 +98,74 @@ async function buildDetailView(req, res, next) {
     next(err);
   }
 }
+
+invCont.buildManagement = async function (req, res) {
+  let nav = await utilities.getNav()
+  res.render("inventory/management", {
+    title: "Inventory Management",
+    nav,
+    message: req.flash("message"),
+  })
+}
+
+invCont.buildAddClassification = async function (req, res) {
+  let nav = await utilities.getNav()
+  res.render("inventory/add-classification", {
+    title: "Add Classification",
+    nav,
+    message: req.flash("message"),
+  })
+}
+
+invCont.addClassification = async function (req, res) {
+  const { classification_name } = req.body
+  const result = await invModel.addClassification(classification_name)
+  if (result) {
+    req.flash("message", "Classification added successfully.")
+    res.redirect("/inv/")
+  } else {
+    req.flash("message", "Failed to add classification.")
+    res.redirect("/inv/add-classification")
+  }
+}
+
+
+invCont.buildAddInventory = async function (req, res) {
+  const nav = await utilities.getNav()
+  const classificationList = await utilities.buildClassificationList()
+
+  res.render("inventory/add-inventory", {
+    title: "Add Inventory",
+    nav,
+    classificationList,
+    message: req.flash("message"),
+    errors: [], 
+  })
+}
+
+
+
+invCont.addInventory = async function (req, res) {
+  const invData = req.body
+  const result = await invModel.addInventory(invData)
+  if (result) {
+    req.flash("success", "Vehicle added successfully.")
+    res.redirect("/inv/")
+  } else {
+    let nav = await utilities.getNav()
+    let classificationList = await utilities.buildClassificationList(invData.classification_id)
+    req.flash("message", "Failed to add vehicle.")
+    res.render("inventory/add-inventory", {
+      title: "Add Inventory",
+      nav,
+      classificationList,
+      ...invData,
+      message: req.flash("message"),
+    })
+  }
+}
+
+
 
 //  Attach the detail function to the controller
 invCont.buildDetailView = buildDetailView;
