@@ -12,9 +12,7 @@ router.get("/register", utilities.handleErrors(accountController.buildRegister))
 
 router.get("/", utilities.checkLogin, accountController.buildAccountDashboard)
 
-router.get("/management", utilities.checkLogin, accountController.buildAccountManagement)
-
-
+router.get("/management", utilities.checkLogin, utilities.checkAdmin, accountController.buildAccountManagement)
 
 // POST register form
 router.post(

@@ -123,6 +123,8 @@ async function loginAccount(req, res) {
   // Set token in httpOnly cookie
   res.cookie("jwt", token, {
     httpOnly: true,
+    secure: true,
+     sameSite: "Strict",
     maxAge: 3600000 // 1 hour
   })
 

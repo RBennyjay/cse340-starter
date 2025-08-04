@@ -96,24 +96,36 @@ Util.buildClassificationList = async function (selectedId = "") {
  * JWT Token Middleware (verifies & sets locals)
  *************************************** */
 Util.checkJWTToken = (req, res, next) => {
-  const token = req.cookies.jwt
+  const token = req.cookies.jwt;
 
   if (!token) {
-    res.locals.loggedIn = false
-    return next()
+    res.locals.loggedIn = false;
+    return next();
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
-    res.locals.accountData = decoded
-    res.locals.loggedIn = true
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    res.locals.accountData = decoded;
+    res.locals.account_type = decoded.account_type;
+    res.locals.loggedIn = true;
   } catch (err) {
-    res.clearCookie("jwt")
-    res.locals.loggedIn = false
+    res.clearCookie("jwt");
+    res.locals.loggedIn = false;
   }
 
-  return next()
-}
+  return next();
+};
+
+Util.checkAdmin = (req, res, next) => {
+  if (res.locals.account_type === "Admin") {
+    return next();
+  }
+
+  req.flash("notice", "Access denied. Admins only.");
+  req.flash("messageType", "error");
+  return res.redirect("/account");
+};
+
 
 /* **************************************
  * Protect Routes: Require Logged-In User
