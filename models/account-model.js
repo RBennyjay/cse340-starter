@@ -23,10 +23,9 @@ async function getAccountByEmail(email) {
     const result = await pool.query(sql, [email])
     return result.rows[0]
   } catch (error) {
-    throw new Error('Error getting account by email: ' + error.message)
+    throw new Error('Database error')
   }
 }
-
 /* **********************
  *   Check for existing email
  * ********************* */

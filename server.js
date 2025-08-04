@@ -11,6 +11,8 @@ const env = require("dotenv").config()
 const session = require("express-session")
 const flash = require("connect-flash")
 const pgSession = require("connect-pg-simple")(session)
+const cookieParser = require("cookie-parser")
+
 const app = express()
 
 
@@ -29,6 +31,8 @@ app.use(express.static("public"))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
+
+
 /* ***********************
  * Session Middleware
  *************************/
@@ -42,6 +46,10 @@ app.use(session({
   saveUninitialized: true,
   name: 'sessionId',
 }))
+
+
+app.use(cookieParser())
+app.use(utilities.checkJWTToken) 
 
 // Flash messages
 app.use(flash())
@@ -57,12 +65,17 @@ app.set("view engine", "ejs")
 app.use(expressLayouts)
 app.set("layout", "layouts/layout")
 
-
+app.use(async (req, res, next) => {
+  res.locals.nav = await utilities.getNav()
+  next()
+})
 
 /* ***********************
  * Static and Route Middleware
  *************************/
 app.use(static)
+
+
 
 
 // Home route

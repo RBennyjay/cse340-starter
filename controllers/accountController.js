@@ -1,6 +1,8 @@
 const utilities = require("../utilities/")
 const accountModel = require("../models/account-model")
 const bcrypt = require("bcryptjs")
+const jwt = require("jsonwebtoken")
+require("dotenv").config()
 
 /* ****************************************
 *  Deliver login view
@@ -37,7 +39,7 @@ async function registerAccount(req, res) {
   let nav = await utilities.getNav()
   const { account_firstname, account_lastname, account_email, account_password } = req.body
 
-  // ✅ Hash the password before storing
+  // Hash the password before storing
   let hashedPassword
   try {
     // Use bcrypt to hash the plain-text password with a salt round of 10
@@ -53,7 +55,7 @@ async function registerAccount(req, res) {
     })
   }
 
-  // ✅ Use the hashed password in the model function
+  // Use the hashed password in the model function
   const regResult = await accountModel.registerAccount(
     account_firstname,
     account_lastname,
@@ -82,7 +84,7 @@ async function registerAccount(req, res) {
 *  Process Login
 * *************************************** */
 async function loginAccount(req, res) {
-  let nav = await utilities.getNav()
+  const nav = await utilities.getNav()
   const { account_email, account_password } = req.body
 
   const accountData = await accountModel.getAccountByEmail(account_email)
@@ -113,15 +115,49 @@ async function loginAccount(req, res) {
     })
   }
 
-  req.session.accountData = accountData
+  // Don't include password in token
+  delete accountData.account_password
+
+  const token = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1h" })
+
+  // Set token in httpOnly cookie
+  res.cookie("jwt", token, {
+    httpOnly: true,
+    maxAge: 3600000 // 1 hour
+  })
+
   req.flash("notice", `Welcome back, ${accountData.account_firstname}!`)
   req.flash("messageType", "success")
-  res.redirect("/account/dashboard")
+  res.redirect("/account")
 }
+
+function buildAccountDashboard(req, res) {
+  const accountData = res.locals.accountData
+  res.render("account/management", {
+    title: "Account Management",
+    accountData,
+    nav: res.locals.nav,
+    message: req.flash("notice"),
+    messageType: req.flash("messageType")
+  })
+}
+
+async function buildAccountManagement(req, res) {
+  const nav = await utilities.getNav()
+  res.render("account/management", {
+    title: "Account Management",
+    nav,
+    accountData: res.locals.accountData
+  })
+}
+
+
 
 module.exports = {
   buildLogin,
   buildRegister,
-  loginAccount,
+  accountLogin: loginAccount, 
   registerAccount,
+  buildAccountDashboard,
+  buildAccountManagement,
 }

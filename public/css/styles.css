@@ -345,3 +345,14 @@ textarea:required:valid {
 
 .btn-submit:hover {
   background-color: #0056b3;
+}
+
+#tools span,
+#tools a {
+  margin-left: 10px;
+}
+
+.welcome-message {
+  font-size: 1.5rem;
+  font-weight: 500;
+}
