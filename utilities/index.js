@@ -80,17 +80,37 @@ Util.buildVehicleDetailView = function (vehicle) {
 /* **************************************
  * Build dropdown list for classifications
  *************************************** */
-Util.buildClassificationList = async function (selectedId = "") {
-  const data = await invModel.getClassifications()
-  let list = '<select name="classification_id" id="classification_id" required>'
-  list += '<option value="">Choose a Classification</option>'
-  data.rows.forEach((row) => {
-    const selected = row.classification_id == selectedId ? "selected" : ""
-    list += `<option value="${row.classification_id}" ${selected}>${row.classification_name}</option>`
+// Util.buildClassificationList = async function (selectedId = "") {
+//   const data = await invModel.getClassifications()
+//   let list = '<select name="classification_id" id="classification_id" required>'
+//   list += '<option value="">Choose a Classification</option>'
+//   data.rows.forEach((row) => {
+//     const selected = row.classification_id == selectedId ? "selected" : ""
+//     list += `<option value="${row.classification_id}" ${selected}>${row.classification_name}</option>`
+//   })
+//   list += "</select>"
+//   return list
+// }
+
+Util.buildClassificationList = async function (classification_id = null) {
+  const classificationList = await invModel.getClassifications() 
+  let data = '<select id="classificationList" name="classification_id">'
+  data += '<option value="">Choose a classification</option>'
+  classificationList.rows.forEach((row) => {
+    data += `<option value="${row.classification_id}"`
+    if (
+      classification_id != null &&
+      row.classification_id == classification_id
+    ) {
+      data += " selected"
+    }
+    data += `>${row.classification_name}</option>`
   })
-  list += "</select>"
-  return list
+  data += "</select>"
+  return data
 }
+
+
 
 /* **************************************
  * JWT Token Middleware (verifies & sets locals)
@@ -116,15 +136,25 @@ Util.checkJWTToken = (req, res, next) => {
   return next();
 };
 
+// Util.checkAdmin = (req, res, next) => {
+//   if (res.locals.account_type === "Admin") {
+//     return next()
+//   }
+//     req.flash("notice", "Access denied. Admins only.");
+//     req.flash("messageType", "error");
+//     return res.redirect("/account");
+//   };
+
 Util.checkAdmin = (req, res, next) => {
-  if (res.locals.account_type === "Admin") {
-    return next();
+  if (res.locals.accountData && res.locals.accountData.account_type === "Admin") {
+    return next()
   }
 
-  req.flash("notice", "Access denied. Admins only.");
-  req.flash("messageType", "error");
-  return res.redirect("/account");
-};
+  req.flash("notice", "Access denied. Admins only.")
+  req.flash("messageType", "error")
+  return res.redirect("/account")
+}
+
 
 
 /* **************************************
@@ -133,12 +163,11 @@ Util.checkAdmin = (req, res, next) => {
 Util.checkLogin = (req, res, next) => {
   if (res.locals.loggedIn) {
     return next()
+  } 
+    req.flash("notice", "Please log in to continue.")
+    req.flash("messageType", "error")
+    return res.redirect("/account/login")
   }
-
-  req.flash("notice", "Please log in to continue.")
-  req.flash("messageType", "error")
-  return res.redirect("/account/login")
-}
 
 /* **************************************
  * General Error Handling Wrapper

@@ -100,10 +100,15 @@ async function buildDetailView(req, res, next) {
 }
 
 invCont.buildManagement = async function (req, res) {
-  let nav = await utilities.getNav()
+  const nav = await utilities.getNav()
+  // const classificationList = await utilities.buildClassificationList()
+  const classificationSelect = await utilities.buildClassificationList()
+
   res.render("inventory/management", {
     title: "Inventory Management",
     nav,
+    // classificationList,
+     classificationSelect,
     message: req.flash("message"),
   })
 }
@@ -162,6 +167,22 @@ invCont.addInventory = async function (req, res) {
       ...invData,
       message: req.flash("message"),
     })
+  }
+}
+
+/* ***************************
+ *  Return Inventory by Classification As JSON
+ * ************************** */
+invCont.getInventoryJSON = async (req, res, next) => {
+  const classification_id = parseInt(req.params.classification_id)
+  try {
+    const invData = await invModel.getInventoryByClassificationId(classification_id)
+
+    //  return the array — empty or not — to the frontend
+    return res.json(invData)
+    
+  } catch (error) {
+    next(error)
   }
 }
 

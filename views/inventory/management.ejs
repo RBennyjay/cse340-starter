@@ -1,13 +1,21 @@
     <main>
-        <h1>Inventory Management</h1>
-        <% if (message) { %>
-            <p class="notice">
-                <%= message %>
-            </p>
-            <% } %>
-                <ul>
-                    <li><a href="/inv/add-classification">Add New Classification</a></li>
-                    <li><a href="/inv/add-inventory">Add New Inventory Item</a></li>
-                </ul>
+    <h1>Inventory Management</h1>
+    
+    <a href="/inv/add-classification">Add New Classification</a><br>
+    <a href="/inv/add-inventory">Add New Vehicle</a>
+    
+    <h2>Manage Inventory</h2>
+    <p>Select a classification to see the inventory:</p>
+    
+    <%- classificationSelect %>
+    
+        <table id="inventoryDisplay"></table>
+    
+        <noscript>
+            <p><strong>JavaScript must be enabled to use this page.</strong></p>
+        </noscript>
+    
+        <script src="/js/inventory.js"></script>
+
     </main>
   
