@@ -360,3 +360,8 @@ textarea:required:valid {
 .welcome-message-user:hover{
   color: #ffcc00;
 }
+
+button[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

@@ -3,7 +3,8 @@ const express = require("express")
 const router = new express.Router()
 const invController = require("../controllers/invController")
 const validate = require("../utilities/classification-validation")
-const inventoryValidate = require("../utilities/inventory-validation")
+const invValidate = require("../utilities/inventory-validation")
+// const inventoryValidate = require("../utilities/inventory-validation")
 const utilities = require("../utilities")
 
 // Route to build inventory by classification view
@@ -35,12 +36,40 @@ router.get("/getInventory/:classification_id",
 
 router.get("/add-inventory", invController.buildAddInventory)
 
+// Route to build the edit inventory view
+router.get("/edit/:inv_id", utilities.handleErrors(invController.editInventoryView))
+
+
+// router.post(
+//   "/add-inventory",
+//   inventoryValidate.inventoryRules(),
+//   inventoryValidate.checkInventoryData,
+//   invController.addInventory
+// )
+
 router.post(
   "/add-inventory",
-  inventoryValidate.inventoryRules(),
-  inventoryValidate.checkInventoryData,
+  invValidate.inventoryRules(),
+  invValidate.checkInventoryData,
   invController.addInventory
 )
+
+
+// router.post(
+//   "/update",
+//   invValidate.inventoryRules(),
+//   invValidate.checkUpdateData,
+//   utilities.handleErrors(invController.updateInventory)
+// )
+
+// Process the update vehicle form
+router.post(
+  "/update",
+  invValidate.inventoryRules(),
+  invValidate.checkUpdateData,
+  invController.updateInventory
+)
+
 
 
 module.exports = router
