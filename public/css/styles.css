@@ -381,3 +381,18 @@ button[disabled] {
 .btn-danger:hover {
   background-color: #a71d2a;
 }
+
+.btn {
+  background-color: #c23c33;
+  color: white;
+  padding: 0.75em 1.5em;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #a8322b;
+}

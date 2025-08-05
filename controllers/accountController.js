@@ -153,6 +153,95 @@ async function buildAccountManagement(req, res) {
   })
 }
 
+const buildUpdateView = async (req, res) => {
+  const account_id = req.params.account_id;
+  const account = await accountModel.getAccountById(account_id);
+
+  let nav = await utilities.getNav();
+res.render("account/update", {
+  title: "Update Account",
+  nav,
+  account,
+  errors: null,
+  message: null,
+  updateErrors: [], 
+  passwordErrors: [], 
+  });
+};
+
+const updateAccount = async (req, res) => {
+  const { account_firstname, account_lastname, account_email, account_id } = req.body;
+  const nav = await utilities.getNav();
+
+  const updateResult = await accountModel.updateAccount({
+    account_firstname,
+    account_lastname,
+    account_email,
+    account_id,
+  });
+
+  const accountData = await accountModel.getAccountById(account_id);
+
+  if (updateResult) {
+    req.flash("notice", "Account updated successfully.");
+    res.redirect("/account");
+  } else {
+    res.status(400).render("account/update", {
+      title: "Update Account",
+      nav,
+      account: accountData,
+      updateErrors: [{ msg: "Update failed. Please try again." }],
+      passwordErrors: [],
+      message: null,
+    });
+  }
+};
+
+
+
+
+async function updatePassword(req, res) {
+  const { account_id, account_password } = req.body;
+  const hashedPassword = await bcrypt.hash(account_password, 10);
+
+  const result = await accountModel.updatePassword(account_id, hashedPassword);
+
+  const nav = await utilities.getNav();
+  const accountData = await accountModel.getAccountById(account_id);
+
+  req.flash("notice", result ? "Password updated successfully." : "Password update failed.");
+
+  res.render("account/update", {
+    title: "Update Account",
+    nav,
+    account: accountData,
+    message: req.flash("notice"),
+    messageType: result ? "success" : "error",
+    updateErrors: [],          
+    passwordErrors: [],     
+  });
+}
+
+const logout = (req, res) => {
+  res.clearCookie("jwt");
+  req.flash("message", "You have successfully logged out.");
+  res.redirect("/");
+};
+
+async function buildChangePasswordView(req, res) {
+  let nav = await utilities.getNav();
+  const accountId = res.locals.accountData.account_id;
+
+  res.render("account/update-password", {
+  title: "Change Password",
+  nav,
+  account: { account_id: accountId },
+  errors: [], 
+  });
+}
+
+
+
 
 
 module.exports = {
@@ -162,4 +251,9 @@ module.exports = {
   registerAccount,
   buildAccountDashboard,
   buildAccountManagement,
+  buildUpdateView,
+  updateAccount,
+  updatePassword,
+  logout,
+  buildChangePasswordView,
 }

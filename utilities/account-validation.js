@@ -2,7 +2,6 @@ const utilities = require(".")
 const { body, validationResult } = require("express-validator")
 const accountModel = require("../models/account-model")
 
-
 const validate = {}
 
 /* **********************************
@@ -20,28 +19,18 @@ validate.registrationRules = () => {
       .escape()
       .notEmpty().withMessage("Please provide a last name."),
 
-    // body("account_email")
-    //   .trim()
-    //   .escape()
-    //   .notEmpty().withMessage("A valid email is required.")
-    //   .bail()
-    //   .isEmail().withMessage("A valid email is required.")
-    //   .normalizeEmail(),
-
-body("account_email")
-  .trim()
-  .notEmpty().withMessage("A valid email is required.")
-  .bail()
-  .isEmail().withMessage("A valid email is required.")
-  .normalizeEmail()
-  .custom(async (account_email) => {
-    const emailExists = await accountModel.checkExistingEmail(account_email)
-    if (emailExists) {
-      throw new Error("Email exists. Please log in or use a different email.")
-    }
-  }),
-
-
+    body("account_email")
+      .trim()
+      .notEmpty().withMessage("A valid email is required.")
+      .bail()
+      .isEmail().withMessage("A valid email is required.")
+      .normalizeEmail()
+      .custom(async (account_email) => {
+        const emailExists = await accountModel.checkExistingEmail(account_email)
+        if (emailExists) {
+          throw new Error("Email exists. Please log in or use a different email.")
+        }
+      }),
 
     body("account_password")
       .trim()
@@ -104,7 +93,7 @@ validate.checkRegData = async (req, res, next) => {
 
 
 /* ******************************
- * Check data and return errors or continue to registration
+ * Check login data and return errors or continue
  * ***************************** */
 validate.checkLoginData = async (req, res, next) => {
   const { account_email } = req.body
@@ -126,4 +115,97 @@ validate.checkLoginData = async (req, res, next) => {
 }
 
 
+/* **********************************
+ *  Update Account Data Validation Rules
+ * ********************************* */
+validate.updateAccountRules = () => {
+  return [
+    body("account_firstname")
+      .trim()
+      .notEmpty()
+      .withMessage("Please provide a first name."),
+    
+    body("account_lastname")
+      .trim()
+      .notEmpty()
+      .withMessage("Please provide a last name."),
+
+    body("account_email")
+      .trim()
+      .isEmail()
+      .withMessage("A valid email is required.")
+  ];
+};
+
+/* **********************************
+ *  Change Password Validation Rules
+ * ********************************* */
+validate.changePasswordRules = () => {
+  return [
+    body("account_password")
+      .trim()
+      .notEmpty().withMessage("Password is required.")
+      .bail()
+      .isStrongPassword({
+        minLength: 12,
+        minLowercase: 1,
+        minUppercase: 1,
+        minNumbers: 1,
+        minSymbols: 1,
+      }).withMessage("Password must be at least 12 characters, contain 1 uppercase letter, 1 number, and 1 special character."),
+  ];
+};
+
+/* **********************************
+ *  Check Change Password Data
+ * ********************************* */
+validate.checkChangePassword = async (req, res, next) => {
+  const { account_id } = req.body;
+  const errors = validationResult(req);
+
+  const accountData = await accountModel.getAccountById(account_id);
+  const nav = await utilities.getNav();
+
+  if (!errors.isEmpty()) {
+    return res.render("account/update", {
+      title: "Update Account",
+      nav,
+      account: accountData,
+      updateErrors: null,
+      passwordErrors: errors.array(),  
+      message: null,
+      messageType: ["error"],
+    });
+  }
+
+  next();
+};
+
+
+validate.checkUpdateAccountData = async (req, res, next) => {
+  const { account_id } = req.body;
+  const errors = validationResult(req);
+
+  const accountData = await accountModel.getAccountById(account_id);
+  const nav = await utilities.getNav();
+
+  if (!errors.isEmpty()) {
+    return res.render("account/update", {
+      title: "Update Account",
+      nav,
+      account: accountData,
+      updateErrors: errors.array(),  
+      passwordErrors: null,
+      message: null,
+      messageType: ["error"],
+    });
+  }
+
+  next();
+};
+
+
+
 module.exports = validate
+
+

@@ -1,0 +1,50 @@
+
+
+    <h1>Manage Account</h1>
+
+    <% if (message) { %>
+        <div class="flash-message success">
+            <%= message %>
+        </div>
+        <% } %>
+
+        <% if (updateErrors && updateErrors.length> 0) { %>
+            <ul class="errors">
+                <% updateErrors.forEach(function(error) { %>
+                    <li>
+                        <%= error.msg %>
+                    </li>
+                    <% }) %>
+            </ul>
+            <% } %>
+
+
+                <section>
+                    <h2>Update Account Information</h2>
+                
+                    <form id="updateAccountForm" action="/account/update" method="post" class="form-section">
+                        <!-- Hidden field -->
+                        <input type="hidden" name="account_id" value="<%= account.account_id %>">
+                
+                        <!-- First Name -->
+                        <label for="account_firstname">First Name</label>
+                        <input type="text" id="account_firstname" name="account_firstname" required
+                            value="<%= typeof account.account_firstname !== 'undefined' ? account.account_firstname : '' %>">
+                
+                        <!-- Last Name -->
+                        <label for="account_lastname">Last Name</label>
+                        <input type="text" id="account_lastname" name="account_lastname" required
+                            value="<%= typeof account.account_lastname !== 'undefined' ? account.account_lastname : '' %>">
+                
+                        <!-- Email -->
+                        <label for="account_email">Email</label>
+                        <input type="email" id="account_email" name="account_email" required
+                            value="<%= typeof account.account_email !== 'undefined' ? account.account_email : '' %>">
+                
+                        <!-- Submit -->
+                        <button type="submit" class="btn-submit">Update Account</button>
+                    </form>
+                </section>
+
+
+       
