@@ -55,13 +55,6 @@ router.post(
 )
 
 
-// router.post(
-//   "/update",
-//   invValidate.inventoryRules(),
-//   invValidate.checkUpdateData,
-//   utilities.handleErrors(invController.updateInventory)
-// )
-
 // Process the update vehicle form
 router.post(
   "/update",
@@ -69,6 +62,12 @@ router.post(
   invValidate.checkUpdateData,
   invController.updateInventory
 )
+
+// Step 1: Deliver delete confirmation view
+router.get("/delete/:inv_id", utilities.handleErrors(invController.buildDeleteInventoryView))
+
+// Step 2: Process the delete
+router.post("/delete", utilities.handleErrors(invController.deleteInventoryItem))
 
 
 

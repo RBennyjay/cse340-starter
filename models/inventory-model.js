@@ -27,7 +27,7 @@ invModel.getInventoryByClassificationId = async function (classification_id) {
   }
 }
 
-invModel.getVehicleById = async function (invId) {
+invModel.getVehicleById= async function (invId) {
   try {
     const result = await pool.query(
       "SELECT * FROM public.inventory WHERE inv_id = $1",
@@ -38,6 +38,19 @@ invModel.getVehicleById = async function (invId) {
     throw error;
   }
 }
+
+invModel.getInventoryItemById = async function (invId) {
+  try {
+    const result = await pool.query(
+      "SELECT * FROM public.inventory WHERE inv_id = $1",
+      [invId]
+    );
+    return result.rows[0];
+  } catch (error) {
+    throw error;
+  }
+}
+
 
 invModel.addClassification = async function (name) {
   try {
@@ -129,6 +142,33 @@ invModel.getAllInventory = async function () {
   }
 }
 
+/* ***************************
+ *  Delete Inventory Item
+ * ************************** */
+invModel.deleteInventoryItem = async function (inv_id) {
+  try {
+    const sql = "DELETE FROM inventory WHERE inv_id = $1"
+    const data = await pool.query(sql, [inv_id])
+    return data.rowCount // optional: or just return data
+  } catch (error) {
+    console.error("Delete Inventory Error", error)
+    throw new Error("Delete Inventory Error")
+  }
+}
+
+/* ***************************
+ *  Build Delete Inventory View
+ * ************************** */
+invModel.buildDeleteInventoryView = async function (inv_id) {
+  try {
+    const sql = "SELECT * FROM inventory WHERE inv_id = $1"
+    const result = await pool.query(sql, [inv_id])
+    return result.rows[0]
+  } catch (error) {
+    throw new Error("Database error")
+  }
+}
+
+
 
 module.exports = invModel
-
