@@ -396,3 +396,14 @@ button[disabled] {
 .btn:hover {
   background-color: #a8322b;
 }
+
+
+
+.star-rating .star {
+  color: #ccc; 
+}
+
+.star-rating .star.filled {
+  color: #f5c518 !important;
+  
+}

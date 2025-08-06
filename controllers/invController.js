@@ -1,5 +1,6 @@
 const invModel = require("../models/inventory-model")
 const utilities = require("../utilities/")
+const reviewModel = require("../models/reviewModel")
 
 const invCont = {}
 
@@ -349,6 +350,29 @@ invCont.deleteInventoryItem = async function (req, res) {
 }
 
 
+
+invCont.buildById = async function (req, res, next) {
+  const inv_id = req.params.inv_id
+
+  try {
+    const vehicleData = await invModel.getVehicleById(inv_id)
+
+    if (!vehicleData) {
+      throw new Error("Vehicle not found.")
+    }
+
+    const reviews = await reviewModel.getReviewsByInvId(inv_id) 
+
+    res.render("./inventory/detail", {
+      title: `${vehicleData.inv_make} ${vehicleData.inv_model}`,
+      vehicle: vehicleData,
+      reviews: reviews, 
+    })
+  } catch (error) {
+    console.error("Error loading vehicle detail:", error)
+    next(error)
+  }
+}
 
 //  Attach the detail function to the controller
 invCont.buildDetailView = buildDetailView;

@@ -23,6 +23,7 @@ const inventoryRoute = require("./routes/inventoryRoute")
 const accountRoute = require("./routes/accountRoute")
 const pool = require('./database/')
 const bodyParser = require("body-parser")
+const reviewRoute = require("./routes/reviewRoute")
 
 
 // Serve static files
@@ -85,7 +86,7 @@ app.get("/", utilities.handleErrors(baseController.buildHome))
 app.use("/inv", inventoryRoute)
 
 
-
+app.use("/reviews", reviewRoute)
 
 // Account routes
 app.use("/account", accountRoute)

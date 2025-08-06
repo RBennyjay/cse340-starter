@@ -1,8 +1,8 @@
 <main class="vehicle-detail-main">
     <h1>
         <%= vehicle.inv_year %>
-        <%= vehicle.inv_make %>
-            <%= vehicle.inv_model %>
+            <%= vehicle.inv_make %>
+                <%= vehicle.inv_model %>
     </h1>
 
     <div class="vehicle-detail-grid">
@@ -26,4 +26,59 @@
             </ul>
         </div>
     </div>
+
+    <% if (locals.accountData) { %>
+        <form action="/reviews/add" method="post" class="review-form">
+            <input type="hidden" name="inv_id" value="<%= vehicle.inv_id %>">
+
+            <label for="rating">Rating (1–5 Stars):</label><br>
+            <select id="rating" name="rating" required>
+                <option value="">Select Rating</option>
+                <% for(let i=1; i <=5; i++) { %>
+                    <option value="<%= i %>">
+                        <%= i %> Star<%= i> 1 ? 's' : '' %>
+                    </option>
+                    <% } %>
+            </select><br><br>
+
+            <label for="review_text">Leave a Review:</label><br>
+            <textarea id="review_text" name="review_text" rows="4" cols="50" required></textarea><br>
+            <button type="submit" class="btn-submit">Submit Review</button>
+        </form>
+        <% } else { %>
+            <p><a href="/account/login">Log in</a> to leave a review.</p>
+            <% } %>
+
+                <h2>Customer Reviews</h2>
+                <% if (reviews && reviews.length> 0) { %>
+                    <ul class="review-list">
+                        <% reviews.forEach(r=> { %>
+                            <li>
+                                <strong>
+                                    <%= r.account_firstname %>
+                                        <%= r.account_lastname %>:
+                                </strong><br>
+                                <%= r.review_text %><br>
+
+                                       <div class="star-rating">
+                                        <% for (let i=1; i <=5; i++) { %>
+                                            <% if (i <=r.rating) { %>
+                                                <span class="star filled">&#9733;</span>
+                                                <% } else { %>
+                                                    <span class="star">&#9733;</span>
+                                                    <% } %>
+                                                        <% } %>
+                                    </div>
+
+                                    <br>
+
+                                    <small>
+                                        <%= new Date(r.review_date).toLocaleString() %>
+                                    </small>
+                            </li>
+                            <% }) %>
+                    </ul>
+                    <% } else { %>
+                        <p>No reviews yet for this vehicle.</p>
+                        <% } %>
 </main>
