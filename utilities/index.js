@@ -112,6 +112,15 @@ Util.buildClassificationList = async function (classification_id = null) {
 
 
 
+Util.setFlashMessages = (req, res, next) => {
+  res.locals.messages = {
+    notice: req.flash("notice"),
+    messageType: req.flash("messageType")
+  };
+  next();
+};
+
+
 /* **************************************
  * JWT Token Middleware (verifies & sets locals)
  *************************************** */

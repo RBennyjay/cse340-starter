@@ -1,10 +1,13 @@
+<!-- layout.ejs -->
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CSE Motors</title>
+    <title>
+        <%= title %> | CSE Motors
+    </title>
 
     <!-- CSS Links -->
     <link rel="stylesheet" href="/css/styles.css">
@@ -17,17 +20,19 @@
     <%- include('../partials/header') %>
 
         <!-- Flash Messages -->
-        <div class="flash-container">
-            <%- messages() %>
-        </div>
+        <% if (messages && messages.notice && messages.notice.length> 0) { %>
+            <div class="flash-message <%= messages.messageType && messages.messageType[0] || 'info' %>">
+                <%= messages.notice[0] %>
+            </div>
+            <% } %>
 
-        <!-- Main Content -->
-        <main>
-            <%- body %>
-        </main>
+                <!-- Main Content -->
+                <main>
+                    <%- body %>
+                </main>
 
-        <!-- Footer Partial -->
-        <%- include('../partials/footer') %>
+                <!-- Footer Partial -->
+                <%- include('../partials/footer') %>
 
 </body>
 

@@ -1,15 +1,9 @@
-<!-- views/account/management.ejs -->
 <main>
-    <h1>Account Management</h1>
-    <p class="welcome-message"><strong>Welcome, <%= accountData.account_firstname %>!</strong></p>
+  
+            <h1>Account Management</h1>
+            <p class="welcome-message"><strong>Welcome, <%= accountData.account_firstname %>!</strong></p>
 
-    <p>You're logged in.</p>
-
-   
-    
-    <p><a href="/account/update-password-form">Change Password</a></p>
-    <a href="/account/update/<%= accountData.account_id %>">Edit Account Info</a>
-
-
-
+            <p>You're logged in.</p>
+            <p><a href="/account/update-password-form">Change Password</a></p>
+            <a href="/account/update/<%= accountData.account_id %>">Edit Account Info</a>
 </main>

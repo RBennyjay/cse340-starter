@@ -59,6 +59,8 @@ app.use((req, res, next) => {
   next()
 })
 
+app.use(utilities.setFlashMessages)
+
 /* ***********************
  * View Engine and Templates
  *************************/
